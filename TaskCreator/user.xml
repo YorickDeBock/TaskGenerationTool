@@ -13,12 +13,12 @@
 <parameter name="seed" value="20" />
 </taskSet>
 <targetHardware>
-<parameter name="architecture" value="ARM7"/>
-<parameter name="CPUSpeedMHz" value="1000"/>
+<parameter name="architecture" value="TriCore"/>
+<parameter name="CPUSpeedMHz" value="150"/>
 <parameter name="cores" value="4"/>
 </targetHardware>
 <benchmark>
-<parameter name="floatingPoint" value="no" default="no"/>
+<parameter name="floatingPoint" value="no" default="yes"/>
 <parameter name="fixedPoint" value="yes" default="yes"/>
 </benchmark></userInput>
 

@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.*;
 
+
 public class SetsGenerator {
 
 	/*
@@ -58,7 +59,7 @@ public class SetsGenerator {
 			e.printStackTrace();
 		}
 		
-		
+		writer.print("<taskSets>\n");
 		for(double load=minLoad;load<=maxLoad;load+=stepLoad)
 		{
 			for(int j=0;j<setsperload;j++)
@@ -69,6 +70,8 @@ public class SetsGenerator {
 				i++;
 			}
 		}
+		writer.print("</taskSets>\n");
+
 		writer.close();
 	}
 	
