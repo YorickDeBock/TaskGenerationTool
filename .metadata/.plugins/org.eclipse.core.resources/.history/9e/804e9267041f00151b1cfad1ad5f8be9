@@ -1,0 +1,131 @@
+package be.uantwerpen.tacle.tasksetgenerator;
+
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+
+public class TasksetExecuter {
+	
+	private List<Component> VMs;
+	private List<Interface> interfaces;
+	private String schedulerName;
+	
+	public TasksetExecuter(String inputFile,String outputFile, String scheduler)
+	{
+		XMLInterpreter input = new XMLInterpreter(inputFile);
+		XMLInterpreter output = new XMLInterpreter(outputFile);
+		schedulerName = scheduler;
+		input.parseFile();
+		output.parseFile();
+		Component rootComponent = input.getRootComponent();
+		Interface interfaceRoot = output.getRootInterface();
+		VMs = rootComponent.getChildComponents();
+		interfaces = interfaceRoot.getChildComponents();
+	}
+	public void createScript()
+	{
+		PrintWriter writer1 = null,writer2 = null;
+		try {
+			for(Component VM:VMs){
+				writer1 = new PrintWriter(VM.getComponentName()+"_taskset.sh", "UTF-8");
+				
+				writer1.println("#Taskset for "+VM.getComponentName());
+				
+				for(Task t:VM.getTaskset())
+					writer1.print("./base_task "+t.getExe()+ " "+t.getPeriod()+" $1 -1 &\n");
+				
+				writer1.print("sleep 1;\n");//reason print: with println a \r is used and gets wrong inpretered in linux
+				writer1.print("./release_ts\n");
+				writer1.println("#End of Taskset");
+				writer1.close();
+			}
+			writer2 = new PrintWriter("bootVMs.sh", "UTF-8");
+			writer2.println("#generated script for booting the VMs with the right amount of VCPUs.");
+			writer2.println("#After the booting process, the budget and period is set.");
+			writer2.print("echo \"Create VMs...\"\n");
+			writer2.print("date +%x_%H:%M:%S:%N\n");
+			
+			for(Interface inter:interfaces){
+				writer2.print("xl create /root/VMS/VM"+(interfaces.indexOf(inter)+1)+".cfg 'vcpus=\""+inter.getTaskset().size()+"\"'\n");
+				writer2.print("echo \"VM"+(interfaces.indexOf(inter)+1)+" created and parameters set.\"\n");
+			}
+			writer2.print("sleep 10;\n");
+			for(Interface inter:interfaces){
+				for(Task task:inter.getTaskset()){
+					writer2.print("while :; do\n");
+					writer2.print("xl "+schedulerName+" -d VM"+(interfaces.indexOf(inter)+1)+" -v "+inter.getTaskset().indexOf(task)+" -p "+task.getPeriod()*1000+" -b "+task.getExe()*1000+"\n");
+					writer2.print("if [ $? -ne 0 ]; then\n");
+					writer2.print("echo \"Cannot find domain\"; sleep 2;\n");
+					writer2.print("else\n");
+					writer2.print("sleep 2; break\n");
+					writer2.print("fi;done\n");
+					writer2.print("\n");		
+				}	
+				//writer2.print("echo \"VM"+(interfaces.indexOf(inter)+1)+" created and parameters set.\"\n");
+				
+			}
+			writer2.print("sleep 5;\n");
+			/*if(i<12)
+			{
+				i=2;
+				for(Interface inter:interfaces){
+					for(Task task:inter.getTaskset()){
+						if(task!=inter.getTaskset().get(inter.getTaskset().size()-1))
+						{
+							writer2.print("xl vcpu-pin VM"+(interfaces.indexOf(inter)+1)+" "+inter.getTaskset().indexOf(task)+" "+i+"\n");
+							i++;
+						}
+					}
+				}
+			}*/
+			writer2.print("echo \"Copying taskset to VMs...\"\n");
+			for(Interface inter:interfaces){
+				writer2.print("chmod 755 VM"+(interfaces.indexOf(inter)+1)+"_taskset.sh \n");
+				writer2.print("scp VM"+(interfaces.indexOf(inter)+1)+"_taskset.sh root@VM"+(interfaces.indexOf(inter)+1)+":/root/liblitmus/startTasks.sh\n");
+			}
+			writer2.print("echo \"Starting the tests for 30s (35s tracing)...\"\n");
+			writer2.print("date +%x_%H:%M:%S:%N\n");
+			for(Interface inter:interfaces){
+				if(inter!=interfaces.get(interfaces.size()-1))
+					writer2.print("ssh root@VM"+(interfaces.indexOf(inter)+1)+" './liblitmus/setsched GSN-EDF; ./startTest.sh 35 30' &\n");
+				else
+					writer2.print("ssh root@VM"+(interfaces.indexOf(inter)+1)+" './liblitmus/setsched GSN-EDF; ./startTest.sh 35 30' \n");
+			}
+			writer2.print("date +%x_%H:%M:%S:%N\n");
+			writer2.print("sleep 15;\n");
+			writer2.print("echo \"Tests are finished!! Copying trace information...\"\n");
+			
+			for(Interface inter:interfaces){
+				writer2.print("mkdir output"+(interfaces.indexOf(inter)+1)+"\n");
+				writer2.print("scp root@VM"+(interfaces.indexOf(inter)+1)+":/root/ft_tools/output/TaskOverview ./resultsVM"+(interfaces.indexOf(inter)+1)+" \n");
+				writer2.print("scp root@VM"+(interfaces.indexOf(inter)+1)+":/root/ft_tools/output/TaskOverview_full ./fullVM"+(interfaces.indexOf(inter)+1)+" \n");
+				for(Task task:inter.getTaskset()){
+					writer2.print("scp root@VM"+(interfaces.indexOf(inter)+1)+":/root/ft_tools/output/output"+inter.getTaskset().indexOf(task)+" ./output"+(interfaces.indexOf(inter)+1)+"/ \n");
+				}
+			}
+			writer2.print("echo \"Destroy VMs..\"\n");
+			writer2.print("date +%x_%H:%M:%S:%N\n");
+			for(Interface inter:interfaces){
+				writer2.print("xl destroy VM"+(interfaces.indexOf(inter)+1)+" & \n");
+			}
+			writer2.print("sleep 5;\n");
+			writer2.print("echo \"Done\"\n");
+			writer2.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public static void main(String[] args) {
+		String sched;
+		if(args.length<3)
+			sched="sched-rt";
+		else
+			sched=args[2];
+		TasksetExecuter scripter = new TasksetExecuter(args[0],args[1],sched);		
+		scripter.createScript();
+	}
+	
+}

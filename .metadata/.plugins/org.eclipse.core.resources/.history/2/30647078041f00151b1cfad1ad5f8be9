@@ -1,0 +1,59 @@
+package be.uantwerpen.tacle.tasksetgenerator;
+
+public class InterfaceLoad {
+	
+	private double exec;
+	private double period;
+	private double totalInput = 0;
+	private int schedudableTasksset=0;
+	
+	public InterfaceLoad()
+	{
+		exec=0;
+		period = 1;
+		
+	}
+	public InterfaceLoad(double exec,double period)
+	{
+		this.exec = exec;
+		if(period==0)
+			this.period = 1;
+		else
+			this.period = period;
+		totalInput++;
+		if(exec/period <=10)
+			schedudableTasksset++;
+	}
+	
+	public void addInterfaceInfo(double exec)
+	{
+		this.exec += exec;
+		totalInput++;
+		if(exec/period <=10)
+			schedudableTasksset++;
+	}
+	public int getSchedudableTasksset()
+	{
+		return schedudableTasksset;
+	}
+	
+	public double getRatio()
+	{
+		return (exec/period)/totalInput;
+	}
+	
+	public double getExec() {
+		return exec;
+	}
+	public void setDeadlineMisses(double exec) {
+		this.exec = exec;
+	}
+	public double getPeriods() {
+		return period;
+	}
+	public void setTotalAmountofTasks(double period) {
+		this.period = period;
+	}
+	
+	
+}

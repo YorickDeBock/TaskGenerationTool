@@ -1,0 +1,9 @@
+package be.uantwerpen.tacle.tasksetgenerator;
+
+import java.util.HashMap;
+
+public class XMLNode {
+	
+	private Map<String,Integer> StringParameters;
+
+}

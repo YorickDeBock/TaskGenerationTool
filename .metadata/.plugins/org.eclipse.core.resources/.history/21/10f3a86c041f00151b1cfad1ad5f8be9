@@ -1,0 +1,48 @@
+package be.uantwerpen.tacle.tasksetgenerator;
+
+public class LoadInfo {
+	
+	private double deadlineMisses;
+	private double totalAmountofTasks;
+	
+	public LoadInfo()
+	{
+		deadlineMisses=0;
+		totalAmountofTasks = 1;
+		
+	}
+	public LoadInfo(double deadlineMisses,double totalAmountofTasks)
+	{
+		this.deadlineMisses = deadlineMisses;
+		if(totalAmountofTasks==0)
+			this.totalAmountofTasks = 1;
+		else
+			this.totalAmountofTasks = totalAmountofTasks;
+	}
+	
+	public void addTasksDeadlineInfo(double deadlineMisses,double totalAmountofTasks)
+	{
+		this.deadlineMisses += deadlineMisses;
+		this.totalAmountofTasks += totalAmountofTasks;
+	}
+	
+	public double getRatio()
+	{
+		return deadlineMisses/totalAmountofTasks;
+	}
+	
+	public double getDeadlineMisses() {
+		return deadlineMisses;
+	}
+	public void setDeadlineMisses(double deadlineMisses) {
+		this.deadlineMisses = deadlineMisses;
+	}
+	public double getTotalAmountofTasks() {
+		return totalAmountofTasks;
+	}
+	public void setTotalAmountofTasks(double totalAmountofTasks) {
+		this.totalAmountofTasks = totalAmountofTasks;
+	}
+	
+	
+}
