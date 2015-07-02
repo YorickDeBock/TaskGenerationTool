@@ -1,85 +1,60 @@
 package be.uantwerpen.taskCreator;
 
-import net.sf.javailp.*;
+import java.util.*;
+
+import scpsolver.constraints.*;
+import scpsolver.lpsolver.LinearProgramSolver;
+import scpsolver.lpsolver.SolverFactory;
+import scpsolver.problems.*;
 
 public class ILPSolver {
 	
-	public void solver()
-	{
-		SolverFactory factory = new SolverFactoryLpSolve(); // use lp_solve
-		factory.setParameter(Solver.VERBOSE, 0); 
-		factory.setParameter(Solver.TIMEOUT, 100); // set timeout to 100 seconds
+	private List<WCET> programs;
+	private double[] values;
+	private double[] lowerBounds;
 
-		/**
-		* Constructing a Problem: 
-		* Maximize: 143x+60y 
-		* Subject to: 
-		* 120x+210y <= 15000 
-		* 110x+30y <= 4000 
-		* x+y <= 75
-		* 
-		* With x,y being integers
-		* 
-		*/
-		Problem problem = new Problem();
-
-		Linear linear = new Linear();
-		linear.add(143, "x");
-		linear.add(60, "y");
-		
-		
-		linear.add(58831,"e0");
-		linear.add(4830246,"e1");
-		linear.add(721212,"e2");
-		linear.add(3144388,"e3");
-		linear.add(225079,"e4");
-		linear.add(73883,"e5");
-		linear.add(20810614,"e6");
-
-
-		problem.setObjective(linear, OptType.MAX);
-
-		linear = new Linear();
-		linear.add(120, "x");
-		linear.add(210, "y");
-
-		problem.add(linear, "<=", 15000);
-
-		linear = new Linear();
-		linear.add(110, "x");
-		linear.add(30, "y");
-
-		problem.add(linear, "<=", 4000);
-
-		linear = new Linear();
-		linear.add(1, "x");
-		linear.add(1, "y");
-
-		problem.add(linear, "<=", 75);
-
-		problem.setVarType("x", Integer.class);
-		problem.setVarType("y", Integer.class);
-
-		Solver solver = factory.get(); // you should use this solver only once for one problem
-		Result result = solver.solve(problem);
-
-		System.out.println(result);
-
-		/**
-		* Extend the problem with x <= 16 and solve it again
-		*/
-		problem.setVarUpperBound("x", 16);
-
-		solver = factory.get();
-		result = solver.solve(problem);
-
-		System.out.println(result);
-	}
+	private LinearProgramSolver solver;
 	
-	public static void main(String args[])
+	public ILPSolver(List<WCET> programs)
 	{
-		ILPSolver ex = new ILPSolver();
-		ex.solver();
+		this.programs = programs;
+		values = new double[programs.size()];
+		lowerBounds = new double[programs.size()];
+		for(int i=0;i<programs.size();i++)
+        {
+        	values[i]=programs.get(i).getExecTime();
+        	lowerBounds[i] = 0;
+        }
+		
+		solver = SolverFactory.getSolver("lpsolver");
 	}
-
+	//true  = binary, false = integer
+	public List<WCET> findProgramCombination(double wantedExecTime, boolean binaryOrInteger) 
+	{
+		LinearProgram lp = new LinearProgram(values); 
+		for(int i = 0; i < lp.getDimension(); i++)
+			if(binaryOrInteger)
+				lp.setBinary(i);
+			else
+			{
+				lp.setInteger(i);
+			}
+		
+		lp.setLowerbound(lowerBounds);
+		lp.addConstraint(new LinearSmallerThanEqualsConstraint(values, wantedExecTime*1000,"c1"));
+		
+		lp.setMinProblem(false);//search for the max value
+		
+		double[] sol = solver.solve(lp);
+		
+		List<WCET> combinationOfPrograms = new ArrayList<WCET>();
+		WCET wcet;
+		for(int i=0;i<sol.length;i++)
+		{
+			wcet = new WCET(programs.get(i).getProgramName(),programs.get(i).getExecTime());
+			wcet.setNumberOfExec((int)sol[i]);
+			combinationOfPrograms.add(wcet);	
+		}
+		return combinationOfPrograms;
+	}
 }

@@ -82,7 +82,7 @@ public class XMLParser {
 			if(nodelist.item(j).getNodeName().equals("taskSet"))
 			{
 				tasksetNodes = nodelist.item(j).getChildNodes();	
-				taskset = new TaskSet(nodelist.item(j).getAttributes().getNamedItem("name").getNodeName());
+				taskset = new TaskSet(nodelist.item(j).getAttributes().getNamedItem("name").getNodeValue(),Double.parseDouble(nodelist.item(j).getAttributes().getNamedItem("load").getNodeValue()));
 				for(int i=0; i<tasksetNodes.getLength();i++)
 				{
 					taskline = tasksetNodes.item(i);
