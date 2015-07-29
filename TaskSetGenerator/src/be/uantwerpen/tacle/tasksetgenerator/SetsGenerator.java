@@ -53,7 +53,7 @@ public class SetsGenerator {
 		PrintWriter writer = null;
 		
 		try {
-			writer = new PrintWriter(location+"/"+name+".xml");
+			writer = new PrintWriter(name+".xml");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -130,8 +130,6 @@ public class SetsGenerator {
 		}
 		Collections.sort(taskset);
 		
-		System.out.println(getTasksetU(taskset));
-		
 		for(int i=0;i<taskset.size();i++)
 			taskset.get(i).setName("Task "+(i+1));
 	}
@@ -195,8 +193,12 @@ public class SetsGenerator {
 	}
 	
 	public static void main(String[] args) 
-	{			
-		SetsGenerator gen = new SetsGenerator("user.xml");
+	{	
+		SetsGenerator gen;
+		if(args.length==1)
+			gen = new SetsGenerator(args[0]);
+		else
+			gen = new SetsGenerator("user.xml");
 		gen.generateTaskset();
 	}
 }

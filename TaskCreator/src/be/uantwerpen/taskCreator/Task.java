@@ -18,19 +18,16 @@ public class Task implements Comparable<Task>{
 			System.err.println("task's execution > deadline");
 		}
 	}
-	
-	
 	public Task() {
 		
 	}
-
+	@Override
 	public String toString(){
 		String str = "--task--";
 		str += "name:" + this.name + ", period:" + this.period + ", exe:" + this.exe + 
 				", deadline:" + this.deadline;
 		return str;
 	}
-	
 	public double getPeriod() {
 		return period;
 	}

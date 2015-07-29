@@ -1,7 +1,7 @@
 <userInput>
 <taskSet>
 <parameter name="name" value="yorick" />
-<parameter name="tasksetlocation" value="C:\Users\Onderzoeker\Desktop" />
+<parameter name="tasksetlocation" value="C:\Users\yorick\Desktop" />
 <parameter name="globalUtilizationMin" value="3"/>
 <parameter name="globalUtilizationMax" value="4"/>
 <parameter name="utilizationStep" value="0.2"/>
@@ -13,12 +13,13 @@
 <parameter name="seed" value="20" />
 </taskSet>
 <targetHardware>
-<parameter name="architecture" value="ARM7"/>
-<parameter name="CPUSpeedMHz" value="1000"/>
+<parameter name="architecture" value="TriCore"/>
+<parameter name="CPUSpeedMHz" value="150"/>
 <parameter name="cores" value="4"/>
 </targetHardware>
 <benchmark>
+<parameter name="location" value="C:/TACLeBench/"/>
 <parameter name="floatingPoint" value="no" default="no"/>
-<parameter name="fixedPoint" value="yes" default="yes"/>
-</benchmark></userInput>
+</benchmark>
+</userInput>
 

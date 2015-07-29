@@ -14,7 +14,6 @@ public class TaskSet {
 		taskSetName = name;
 		tasks = new ArrayList<Task>();
 		this.load = load;
-
 	}
 	public void addTask(Task t)
 	{

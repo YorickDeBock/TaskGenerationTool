@@ -5,12 +5,14 @@ public class WCET {
 	private double execTime; //in ns
 	private String programName;
 	private int numberOfExec;
+	private String location;
 	
-	public WCET(String programName, double execTime)
+	public WCET(String programName, double execTime, String location)
 	{
 		this.programName = programName;
 		this.execTime = execTime; //ns
 		this.numberOfExec = 1;
+		this.location = location;
 	}
 	public WCET(String programName, double cycles, double frequency) //frequency in MHz
 	{
@@ -35,5 +37,12 @@ public class WCET {
 	public void setNumberOfExec(int numberOfExec) {
 		this.numberOfExec = numberOfExec;
 	}
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
+	}
+	
 	
 }

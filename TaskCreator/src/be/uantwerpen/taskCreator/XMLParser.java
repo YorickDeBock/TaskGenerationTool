@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.print.attribute.Attribute;
 import javax.xml.parsers.*;
 
 import org.w3c.dom.*;
@@ -103,8 +100,6 @@ public class XMLParser {
 		
 		return taskSetList;
 	}
-	
-
 	public Map<String,List<String>> getParameters(String name)
 	{
 		Map<String,List<String>> parameters = new HashMap<String, List<String>>();

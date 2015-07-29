@@ -1,7 +1,7 @@
 <userInput>
 <taskSet>
 <parameter name="name" value="yorick" />
-<parameter name="tasksetlocation" value="C:\Users\Onderzoeker\Desktop" />
+<parameter name="tasksetlocation" value="C:\Users\yorick\Desktop" />
 <parameter name="globalUtilizationMin" value="3"/>
 <parameter name="globalUtilizationMax" value="4"/>
 <parameter name="utilizationStep" value="0.2"/>
@@ -16,9 +16,11 @@
 <parameter name="architecture" value="TriCore"/>
 <parameter name="CPUSpeedMHz" value="150"/>
 <parameter name="cores" value="4"/>
+<parameter name="cacheFlushTime" value="1500" />
 </targetHardware>
 <benchmark>
-<parameter name="floatingPoint" value="no" default="yes"/>
-<parameter name="fixedPoint" value="yes" default="yes"/>
-</benchmark></userInput>
+<parameter name="location" value="C:\Users\Onderzoeker\CloudStation\DOCTORAAT\2015_STSM\TACLeBench"/>
+<parameter name="floatingPoint" value="no" default="no"/>
+</benchmark>
+</userInput>
 
