@@ -1,0 +1,26 @@
+<userInput>
+<taskSet>
+<parameter name="name" value="yorick" />
+<parameter name="tasksetlocation" value="C:\Users\Yorick De Bock\Desktop" />
+<parameter name="globalUtilizationMin" value="3"/>
+<parameter name="globalUtilizationMax" value="4"/>
+<parameter name="utilizationStep" value="0.2"/>
+<parameter name="numberOfTasks" value="20"/>
+<parameter name="numberOfTaskSets" value="10"/>
+<parameter name="periodMin" value="100000"/>
+<parameter name="periodMax" value="700000"/>
+<parameter name="periodStep" value="1000"/>
+<parameter name="seed" value="20" />
+</taskSet>
+<targetHardware>
+<parameter name="architecture" value="TriCore"/>
+<parameter name="CPUSpeedMHz" value="150"/>
+<parameter name="cores" value="4"/>
+<parameter name="cacheFlushTime" value="1500" />
+</targetHardware>
+<benchmark>
+<parameter name="location" value="C:\Users\Yorick De Bock\CloudStation\DOCTORAAT\2015_STSM\TACLeBench"/>
+<parameter name="floatingPoint" value="no" default="no"/>
+</benchmark>
+</userInput>
+
