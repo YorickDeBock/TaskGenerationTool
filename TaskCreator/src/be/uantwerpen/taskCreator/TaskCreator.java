@@ -20,6 +20,7 @@ public class TaskCreator {
 	static final String CORES 			= "cores";
 	static final double MAX_DEVIATION 	= 2.0;//percentage
 	static final String LOCATION		= "location";
+	static final String TASKSETLOCATION		= "tasksetlocation";
 	static final String CACHEFLUSHTIME 	= "cacheFlushTime";
 	
 	private Map<String, List<String>> paramsTarget;
@@ -96,21 +97,20 @@ public class TaskCreator {
 	//Using a Integer Linear Program solver
 	public void createProgramSequence()
 	{
-        //ILPSolver solver = new ILPSolver(usablePrograms,Double.parseDouble(paramsTarget.get(CACHEFLUSHTIME).get(0)));
 		LpSolver solver = new LpSolver(usablePrograms,Double.parseDouble(paramsTarget.get(CACHEFLUSHTIME).get(0)));
         List<WCET> programSequence = null;
         PrintWriter writer;
         String resultString = null;
-        String tasksetsLocation = "TaskSet_"+tasksetsFile.substring(0, tasksetsFile.length()-4);
+        String tasksetsLocation = paramsTaskSet.get(TASKSETLOCATION).get(0)+"/TaskSet_"+tasksetsFile.substring(0, tasksetsFile.length()-4);
         double combinedWCET;
         int ILP = 0;
         File taskSetDir;
         try {
         	File dir = new File(tasksetsLocation);
         	dir.mkdir();
-        	TaskSet ts  = tasksets.get(20);
-        	/*for(TaskSet ts:tasksets)
-        	{*/
+        	//TaskSet ts  = tasksets.get(20);
+        	for(TaskSet ts:tasksets)
+        	{
         		taskSetDir = new File(tasksetsLocation+"/"+ts.getTaskSetName());
         		taskSetDir.mkdir();
 				writer = new PrintWriter(tasksetsLocation+"/"+ts.getTaskSetName()+"/taskset.xml");
@@ -148,7 +148,7 @@ public class TaskCreator {
 				}  
 		        writer.print("</taskSet>\n");
 		        writer.close();
-        	//}
+        	}
         	System.out.println(1000 - ILP + " of a 1000 Tasks BLP and " + ILP +" through ILP");
         } catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

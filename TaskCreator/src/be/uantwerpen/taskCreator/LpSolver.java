@@ -175,7 +175,7 @@ public class LpSolver {
             GLPK.glp_set_obj_coef(lp, programs.size()+1, cacheFlushTime);
 
             // Write model to file
-            GLPK.glp_write_lp(lp, null, "lp.lp");
+           // GLPK.glp_write_lp(lp, null, "lp.lp");
             
             iocp = new glp_iocp();
             GLPK.glp_init_iocp(iocp);

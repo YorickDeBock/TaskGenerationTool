@@ -131,7 +131,7 @@ public class SetsGenerator {
 		Collections.sort(taskset);
 		
 		for(int i=0;i<taskset.size();i++)
-			taskset.get(i).setName("Task "+(i+1));
+			taskset.get(i).setName("Task"+(i+1));
 	}
 	private double getTasksetU(List<Task> taskset)
 	{

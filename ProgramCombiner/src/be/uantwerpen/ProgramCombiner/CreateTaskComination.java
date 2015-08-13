@@ -25,7 +25,7 @@ public class CreateTaskComination {
 	private Map<String, List<String>> paramsTaskSet;
 	private Map<String, List<String>> paramsBenchmark;
 	
-	public ReadTaskSet(String inputParameters)
+	public CreateTaskComination(String inputParameters)
 	{
 		checkInput(inputParameters);
 	}
@@ -48,7 +48,7 @@ public class CreateTaskComination {
 	public void scanTaskSet()
 	{
 		File f = new File(paramsTaskSet.get(LOCATION).get(0)+"/TaskSet_"+paramsTaskSet.get(NAME).get(0));
-		
+		String genMakefile = "all:\n";
 		FileFilter filter = new FileFilter() {
 			
 			@Override
@@ -63,8 +63,25 @@ public class CreateTaskComination {
 		{
 			cFilePreparation(t);
 			createProgramCombination(t);
+			genMakefile += createMakefile(t);
 		}
+		createGeneralMakefile(genMakefile);
 		
+	}
+	private void createGeneralMakefile(String rules)
+	{
+		BufferedWriter writer =null;
+		try{
+			File file = new File(paramsTaskSet.get(LOCATION).get(0)+"/TaskSet_"+paramsTaskSet.get(NAME).get(0)+"/Makefile");
+			writer = new BufferedWriter(new FileWriter(file));
+			writer.write(rules);
+			writer.close();
+			
+
+		}catch (IOException excep)  {
+			// TODO Auto-generated catch block
+			excep.printStackTrace();
+		} 
 	}
 	private void cFilePreparation(File taskSetFolder)
 	{
@@ -99,7 +116,7 @@ public class CreateTaskComination {
 		        	out.append(line+"\n");
 		        }
 		        reader.close();			       
-		        File file = new File(taskSetFolder.getAbsolutePath()+"/"+name+"_new.c");
+		        File file = new File(taskSetFolder.getAbsolutePath()+"/"+name+"/"+name+".c");
 		        writer = new BufferedWriter(new FileWriter(file));
 		        writer.write(out.toString());
 		        writer.close();
@@ -125,11 +142,12 @@ public class CreateTaskComination {
 				writer = new BufferedWriter(new FileWriter(taskCFile));
 				writer.write("int main(void)\n");
 				writer.write("{\n");
+				writer.write("\tint i;\n");
 				for(Entry<String,Integer> e:t.getPrograms().entrySet())
 				{
 					if(e.getValue()>1)
 					{
-						writer.write("\tfor(int i = 0; i <"+e.getValue()+"; i++)\n\t{\n");
+						writer.write("\tfor(i = 0; i <"+e.getValue()+"; i++)\n\t{\n");
 						writer.write("\t\tmain_"+e.getKey()+"();\n\t}\n");
 					}
 					else
@@ -142,14 +160,116 @@ public class CreateTaskComination {
 				writer.close();
 		       
 			}
+			
 		 } catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 	}
+	private String createMakefile(File taskSetFolder)
+	{
+		BufferedWriter writer;
+		String vpath="";
+		String deps="";
+		String obj="";
+		String name="";
+		String all="all:";
+		String rules="";
+		String generalMakefile = "";
+		
+		FilenameFilter headerFilter = new FilenameFilter() {
+
+			@Override
+			public boolean accept(File file, String name) {
+				if(name.contains(".h"))
+					return true;
+				return false;
+			}
+			
+		};
+		FilenameFilter cfileFilter = new FilenameFilter() {
+
+			@Override
+			public boolean accept(File file, String name) {
+				if(name.contains(".c"))
+					return true;
+				return false;
+			}
+			
+		};
+		FilenameFilter taskFilter = new FilenameFilter() {
+
+			@Override
+			public boolean accept(File file, String name) {
+				if(name.contains("Task")&&name.contains(".c"))
+					return true;
+				return false;
+			}
+			
+		};
+		FileFilter isFolder = new FileFilter() {
+
+			@Override
+			public boolean accept(File pathname) {
+				if(pathname.isDirectory())
+					return true;
+				return false;
+			}
+		};
+		
+		generalMakefile="\t cd "+taskSetFolder.getName()+" && $(MAKE) all\n";
+		
+		for(File folder:taskSetFolder.listFiles(isFolder))
+		{
+		   vpath+=folder.getName()+":";
+		   for(File hFile:folder.listFiles(headerFilter))
+		   {
+			   deps+=folder.getName()+"/"+hFile.getName()+" ";  
+		   }
+		   for(File cFile:folder.listFiles(cfileFilter))
+		   {
+			   name = cFile.getName().replace(".c", ".o");
+			   obj+=name+" ";
+		   }
+		}
+		vpath=vpath.substring(0, vpath.length()-1);
+		deps=deps.substring(0, deps.length()-1);
+		obj=obj.substring(0, obj.length()-1);
+		
+		for(File task:taskSetFolder.listFiles(taskFilter))
+		{
+			all += " "+(task.getName().split("\\."))[0];
+			rules += (task.getName().split("\\."))[0]+": $(OBJ)\n\t$(CC) -o $@ $^ "+task.getName()+" $(CFLAGS)\n";
+		}
+	 
+		try{
+			File file = new File(taskSetFolder.getAbsolutePath()+"/Makefile");
+			writer = new BufferedWriter(new FileWriter(file));
+			writer.write("CC=gcc\n");
+			writer.write("CFLAGS=-I.\n");
+			writer.write("ODIR=obj\n");
+			writer.write("VPATH = "+vpath+"\n\n");
+			writer.write("_DEPS = "+deps+"\n");
+			writer.write("DEPS = $(patsubst %,$/%,$(_DEPS))\n\n");
+			writer.write("_OBJ = "+obj+"\n");
+			writer.write("OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))\n\n");
+			writer.write("$(ODIR)/%.o: %.c $(DEPS)\n\t$(CC) -c -o $@ $< $(CFLAGS)\n\n");
+			writer.write(all+"\n\n");
+			writer.write(rules+"\n");
+			writer.write(".PHONY: clean\n\nclean:\n\trm -f $(ODIR)/*.o\n\n");
+			writer.write("-include $(shell mkdir obj 2>NUL) $(wildcard obj/*)");
+			writer.close();
+			
+
+		}catch (IOException excep)  {
+			// TODO Auto-generated catch block
+			excep.printStackTrace();
+		} 
+		return generalMakefile;
+	}
 	public static void main(String[] args)
 	{
-		ReadTaskSet reader = new ReadTaskSet("./user.xml");
+		CreateTaskComination reader = new CreateTaskComination("./user.xml");
 		reader.scanTaskSet();
 	}
 

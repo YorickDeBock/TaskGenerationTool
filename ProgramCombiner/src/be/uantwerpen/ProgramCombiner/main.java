@@ -24,7 +24,7 @@ public class main {
         System.out.println(out.toString());   //Prints the string content read from input stream
         reader.close();
         
-        File file = new File("./fft1_new.c");
+        File file = new File("./fft1.c");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(out.toString());
         }		} catch (FileNotFoundException e) {
