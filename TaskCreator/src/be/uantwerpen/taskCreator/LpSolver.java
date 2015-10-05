@@ -3,7 +3,14 @@ package be.uantwerpen.taskCreator;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gnu.glpk.*;
+import org.gnu.glpk.GLPK;
+import org.gnu.glpk.GLPKConstants;
+import org.gnu.glpk.GlpkException;
+import org.gnu.glpk.SWIGTYPE_p_double;
+import org.gnu.glpk.SWIGTYPE_p_int;
+import org.gnu.glpk.glp_iocp;
+import org.gnu.glpk.glp_prob;
+
 
 public class LpSolver {
 	private List<WCET> programs;

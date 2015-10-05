@@ -20,7 +20,7 @@ public class TaskCreator {
 	static final String CORES 			= "cores";
 	static final double MAX_DEVIATION 	= 2.0;//percentage
 	static final String LOCATION		= "location";
-	static final String TASKSETLOCATION		= "tasksetlocation";
+	static final String TASKSETLOCATION	= "tasksetlocation";
 	static final String CACHEFLUSHTIME 	= "cacheFlushTime";
 	
 	private Map<String, List<String>> paramsTarget;

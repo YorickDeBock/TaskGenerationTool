@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 
-public class CreateTaskComination {
+public class ReadTaskSet {
 	
 	static final String NAME 	= "name";
 	static final String LOCATION 	= "tasksetlocation";

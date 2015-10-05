@@ -5,11 +5,7 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Windows/System32"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="libs/javailp-1.2a.jar"/>
-	<classpathentry kind="lib" path="libs/junit.jar"/>
-	<classpathentry kind="lib" path="libs/GLPKSolverPack.jar"/>
-	<classpathentry kind="lib" path="libs/SCPSolver.jar"/>
-	<classpathentry kind="lib" path="libs/commons-io-2.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/commons-io-2.4.jar"/>
 	<classpathentry kind="lib" path="libs/glpk-java.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>

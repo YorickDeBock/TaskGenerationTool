@@ -64,7 +64,7 @@ public class SetsGenerator {
 		{
 			for(int j=0;j<setsperload;j++)
 			{
-				taskSetName = "TaskSet_"+i+"_"+new Double(Math.round(100*load)).toString()+"_v"+j;
+				taskSetName = "TaskSet_"+new Double(Math.round(100*load)).toString()+"_v"+j;
 				createTasks(minPeriod,maxPeriod, stepPeriod ,load,numberTasks,seed+j);
 				writer.print(XMLgenerator(taskSetName,Math.round(100*load)));
 				i++;
