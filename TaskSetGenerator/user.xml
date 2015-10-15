@@ -1,7 +1,7 @@
 <userInput>
 <taskSet>
-<parameter name="name" value="TaskSet_9-9_1" />
-<parameter name="tasksetlocation" value="C:\Users\Yorick De Bock\Desktop" />
+<parameter name="name" value="TaskSet_9-10_1" />
+<parameter name="tasksetlocation" value="C:\Users\Yorick De Bock\Desktop" ></parameter>
 <parameter name="globalUtilizationMin" value="1.1"/>
 <parameter name="globalUtilizationMax" value="9.9"/>
 <parameter name="utilizationStep" value="0.2"/>
@@ -13,9 +13,9 @@
 <parameter name="seed" value="20" />
 </taskSet>
 <targetHardware>
-<parameter name="architecture" value="TriCore"/>
-<parameter name="CPUSpeedMHz" value="150"/>
-<parameter name="cores" value="4"/>
+<parameter name="architecture" value="x86"/>
+<parameter name="CPUSpeedMHz" value="2200"/>
+<parameter name="cores" value="10"/>
 </targetHardware>
 <benchmark>
 <parameter name="location" value="C:\Users\Yorick De Bock\CloudStation\DOCTORAAT\2015_STSM\TACLeBench"/>

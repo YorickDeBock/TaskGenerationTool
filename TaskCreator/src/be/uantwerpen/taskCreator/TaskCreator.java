@@ -88,7 +88,7 @@ public class TaskCreator {
 			parameters = parser.parseDesriptionFile(f,paramsTarget.get(ARCHITECTURE).get(0));
 			if(parameters == null)
 				continue;
-			tupple = new WCET(parameters.get("name").get(0),Double.parseDouble(parameters.get("WCET").get(1)),parameters.get("path").get(0));
+			tupple = new WCET(parameters.get("name").get(0),(Double.parseDouble(parameters.get("WCET").get(1)))/(Double.parseDouble(parameters.get("SPEED").get(1))),parameters.get("path").get(0));
 			usablePrograms.add(tupple);
 		}	
 		//TODO: include the selection parameters for the benchmarks			

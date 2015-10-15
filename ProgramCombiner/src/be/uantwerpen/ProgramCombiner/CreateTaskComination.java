@@ -49,6 +49,7 @@ public class CreateTaskComination {
 	{
 		File f = new File(paramsTaskSet.get(LOCATION).get(0)+"/TaskSet_"+paramsTaskSet.get(NAME).get(0));
 		String genMakefile = "all:\n";
+		System.out.println(f.getName());
 		FileFilter filter = new FileFilter() {
 			
 			@Override
@@ -269,7 +270,7 @@ public class CreateTaskComination {
 	}
 	public static void main(String[] args)
 	{
-		CreateTaskComination reader = new CreateTaskComination("./user.xml");
+		CreateTaskComination reader = new CreateTaskComination("C:/Users/Yorick De Bock/Desktop/user.xml");
 		reader.scanTaskSet();
 	}
 
