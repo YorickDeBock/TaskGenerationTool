@@ -2,8 +2,8 @@
 <taskSet>
 <parameter name="name" value="TaskSet_12-11_1" />
 <parameter name="tasksetlocation" value="C:\Users\Yorick De Bock\Desktop" ></parameter>
-<parameter name="globalUtilizationMin" value="4.1"/>
-<parameter name="globalUtilizationMax" value="4.1"/>
+<parameter name="globalUtilizationMin" value="1.1"/>
+<parameter name="globalUtilizationMax" value="9.9"/>
 <parameter name="utilizationStep" value="0.2"/>
 <parameter name="numberOfTasks" value="20"/>
 <parameter name="numberOfTaskSets" value="10"/>

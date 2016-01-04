@@ -108,12 +108,19 @@ public class CreateTaskComination {
 				reader = new BufferedReader(new InputStreamReader(in));
 		        out = new StringBuilder();
 		        String line;
+		        boolean remove = false;
 		        while ((line = reader.readLine()) != null) {
+		        	if(line.contains("int main")&&line.contains(";"))
+		        		continue;
 		        	if(line.contains("int main"))
 		        	{
-		        		line = "int main_"+name+"(void)";
+		        		//line = "int main_"+name+"(void)";
+		        		remove = true;
 		        	}
-		        	out.append(line+"\n");
+		        	if(!remove)
+		        		out.append(line+"\n");
+		        	if(line.contains("}")&&remove)
+		        		remove=false; 		
 		        }
 		        reader.close();			       
 		        File file = new File(taskSetFolder.getAbsolutePath()+"/"+name+"/"+name+".c");
@@ -140,7 +147,7 @@ public class CreateTaskComination {
 			{
 				taskCFile = new File(taskSetFolder.getAbsolutePath()+"/"+t.getName()+".c");
 				writer = new BufferedWriter(new FileWriter(taskCFile));
-				writer.write("int main(void)\n");
+				writer.write("int task(void)\n");
 				writer.write("{\n");
 				writer.write("\tint i;\n");
 				for(Entry<String,Integer> e:t.getPrograms().entrySet())
@@ -148,11 +155,13 @@ public class CreateTaskComination {
 					if(e.getValue()>1)
 					{
 						writer.write("\tfor(i = 0; i <"+e.getValue()+"; i++)\n\t{\n");
-						writer.write("\t\tmain_"+e.getKey()+"();\n\t}\n");
+						writer.write("\t\t"+e.getKey()+"_init();\n");
+						writer.write("\t\t"+e.getKey()+"_main();\n\t}\n");
 					}
 					else
 					{
-						writer.write("\tmain_"+e.getKey()+"();\n");
+						writer.write("\t"+e.getKey()+"_init();\n");
+						writer.write("\t"+e.getKey()+"_main();\n");
 					}
 					
 				}
@@ -176,6 +185,7 @@ public class CreateTaskComination {
 		String all="all:";
 		String rules="";
 		String generalMakefile = "";
+		String taskName = "";
 		
 		FilenameFilter headerFilter = new FilenameFilter() {
 
@@ -238,22 +248,23 @@ public class CreateTaskComination {
 		
 		for(File task:taskSetFolder.listFiles(taskFilter))
 		{
-			all += " "+(task.getName().split("\\."))[0];
-			rules += (task.getName().split("\\."))[0]+": $(OBJ)\n\t$(CC) -o $@ $^ "+task.getName()+" $(CFLAGS)\n";
+			taskName = (task.getName().split("\\."))[0];
+			all += " "+taskName;
+			rules += taskName+": $(OBJ)\n\t$(CC) $(CFLAGS) -o libtask.so."+taskName.substring(4, taskName.length())+".0 $^ "+task.getName()+"\n";
 		}
 	 
 		try{
 			File file = new File(taskSetFolder.getAbsolutePath()+"/Makefile");
 			writer = new BufferedWriter(new FileWriter(file));
 			writer.write("CC=gcc\n");
-			writer.write("CFLAGS=-I.\n");
+			writer.write("CFLAGS= -Wall -shared -fPIC -Wl,-soname,libtask.so.1 -I.\n");
 			writer.write("ODIR=obj\n");
 			writer.write("VPATH = "+vpath+"\n\n");
 			writer.write("_DEPS = "+deps+"\n");
 			writer.write("DEPS = $(patsubst %,$/%,$(_DEPS))\n\n");
 			writer.write("_OBJ = "+obj+"\n");
 			writer.write("OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))\n\n");
-			writer.write("$(ODIR)/%.o: %.c $(DEPS)\n\t$(CC) -c -o $@ $< $(CFLAGS)\n\n");
+			writer.write("$(ODIR)/%.o: %.c $(DEPS)\n\t$(CC) -fPIC -c -o $@ $< \n\n");
 			writer.write(all+"\n\n");
 			writer.write(rules+"\n");
 			writer.write(".PHONY: clean\n\nclean:\n\trm -f $(ODIR)/*.o\n\n");

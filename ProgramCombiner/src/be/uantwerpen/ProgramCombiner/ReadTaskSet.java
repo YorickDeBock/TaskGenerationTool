@@ -47,8 +47,8 @@ public class ReadTaskSet {
 	}
 	public void scanTaskSet()
 	{
-		File f = new File(paramsTaskSet.get(LOCATION).get(0)+"/TaskSet_"+paramsTaskSet.get(NAME).get(0));
-		
+		File f = new File(paramsTaskSet.get(LOCATION).get(0)+"/"+paramsTaskSet.get(NAME).get(0));
+		//File f = new File(".");
 		FileFilter filter = new FileFilter() {
 			
 			@Override
@@ -66,7 +66,7 @@ public class ReadTaskSet {
 		}
 		
 	}
-	private void cFilePreparation(File taskSetFolder)
+	public void cFilePreparation(File taskSetFolder)
 	{
 		BufferedReader reader;
 		InputStream in;
@@ -87,16 +87,22 @@ public class ReadTaskSet {
 		{
 			try {
 				name = folder.getName();
+				System.out.println(name);
 				in = new FileInputStream(new File(taskSetFolder.getAbsolutePath()+"/"+name+"/"+name+".c"));
 				reader = new BufferedReader(new InputStreamReader(in));
 		        out = new StringBuilder();
 		        String line;
+		        boolean remove=false;
 		        while ((line = reader.readLine()) != null) {
 		        	if(line.contains("int main"))
 		        	{
-		        		line = "int main_"+name+"(void)";
+		        		//line = "int main_"+name+"(void)";
+		        		remove = true;
 		        	}
-		        	out.append(line+"\n");
+		        	if(line.contains("}")&&remove)
+		        		remove=false;
+		        	if(!remove)
+		        		out.append(line+"\n");
 		        }
 		        reader.close();			       
 		        File file = new File(taskSetFolder.getAbsolutePath()+"/"+name+"_new.c");
@@ -151,6 +157,7 @@ public class ReadTaskSet {
 	{
 		ReadTaskSet reader = new ReadTaskSet("./user.xml");
 		reader.scanTaskSet();
+		//reader.cFilePreparation(new File("./TaskSet"));
 	}
 
 }
