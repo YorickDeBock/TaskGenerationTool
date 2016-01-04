@@ -88,7 +88,7 @@ public class TaskCreator {
 			parameters = parser.parseDesriptionFile(f,paramsTarget.get(ARCHITECTURE).get(0));
 			if(parameters == null)
 				continue;
-			tupple = new WCET(parameters.get("name").get(0),(Double.parseDouble(parameters.get("WCET").get(1)))/(Double.parseDouble(parameters.get("SPEED").get(1))),parameters.get("path").get(0));
+			tupple = new WCET(parameters.get("name").get(0),(Double.parseDouble(parameters.get("WCET").get(1)))/(Double.parseDouble(paramsTarget.get(SPEED).get(0))),parameters.get("path").get(0));
 			usablePrograms.add(tupple);
 		}	
 		//TODO: include the selection parameters for the benchmarks			
@@ -101,7 +101,7 @@ public class TaskCreator {
         List<WCET> programSequence = null;
         PrintWriter writer;
         String resultString = null;
-        String tasksetsLocation = paramsTaskSet.get(TASKSETLOCATION).get(0)+"/TaskSet_"+tasksetsFile.substring(0, tasksetsFile.length()-4);
+        String tasksetsLocation = paramsTaskSet.get(TASKSETLOCATION).get(0)+"/"+tasksetsFile.substring(0, tasksetsFile.length()-4);
         double combinedWCET;
         int ILP = 0;
         File taskSetDir;

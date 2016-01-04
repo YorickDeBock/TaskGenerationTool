@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-
 public class CreateTaskComination {
 	
 	static final String NAME 	= "name";
@@ -47,7 +46,7 @@ public class CreateTaskComination {
 	}
 	public void scanTaskSet()
 	{
-		File f = new File(paramsTaskSet.get(LOCATION).get(0)+"/TaskSet_"+paramsTaskSet.get(NAME).get(0));
+		File f = new File(paramsTaskSet.get(LOCATION).get(0)+"/"+paramsTaskSet.get(NAME).get(0));
 		String genMakefile = "all:\n";
 		System.out.println(f.getName());
 		FileFilter filter = new FileFilter() {
@@ -73,7 +72,7 @@ public class CreateTaskComination {
 	{
 		BufferedWriter writer =null;
 		try{
-			File file = new File(paramsTaskSet.get(LOCATION).get(0)+"/TaskSet_"+paramsTaskSet.get(NAME).get(0)+"/Makefile");
+			File file = new File(paramsTaskSet.get(LOCATION).get(0)+"/"+paramsTaskSet.get(NAME).get(0)+"/Makefile");
 			writer = new BufferedWriter(new FileWriter(file));
 			writer.write(rules);
 			writer.close();
@@ -270,7 +269,11 @@ public class CreateTaskComination {
 	}
 	public static void main(String[] args)
 	{
-		CreateTaskComination reader = new CreateTaskComination("C:/Users/Yorick De Bock/Desktop/user.xml");
+		CreateTaskComination reader;
+		if(args.length==1)
+			reader = new CreateTaskComination(args[0]);
+		else
+			reader = new CreateTaskComination("user.xml");
 		reader.scanTaskSet();
 	}
 

@@ -1,9 +1,9 @@
 <userInput>
 <taskSet>
-<parameter name="name" value="TaskSet_9-10_1" />
+<parameter name="name" value="TaskSet_12-11_1" />
 <parameter name="tasksetlocation" value="C:\Users\Yorick De Bock\Desktop" ></parameter>
-<parameter name="globalUtilizationMin" value="1.1"/>
-<parameter name="globalUtilizationMax" value="9.9"/>
+<parameter name="globalUtilizationMin" value="4.1"/>
+<parameter name="globalUtilizationMax" value="4.1"/>
 <parameter name="utilizationStep" value="0.2"/>
 <parameter name="numberOfTasks" value="20"/>
 <parameter name="numberOfTaskSets" value="10"/>
@@ -14,7 +14,7 @@
 </taskSet>
 <targetHardware>
 <parameter name="architecture" value="x86"/>
-<parameter name="CPUSpeedMHz" value="2200"/>
+<parameter name="CPUSpeedMHz" value="2200.048"/>
 <parameter name="cores" value="10"/>
 </targetHardware>
 <benchmark>
