@@ -65,7 +65,7 @@ public class SetsGenerator {
 			for(int j=0;j<setsperload;j++)
 			{
 				taskSetName = "TaskSet_"+new Double(Math.round(100*load)).toString()+"_v"+j;
-				createTasks(minPeriod,maxPeriod, stepPeriod ,load,numberTasks,seed+j);
+				createTasks(minPeriod,maxPeriod, stepPeriod ,load,numberTasks,seed+(j+1)*(int)Math.round(10*load));
 				writer.print(XMLgenerator(taskSetName,Math.round(100*load)));
 				i++;
 			}
@@ -90,7 +90,7 @@ public class SetsGenerator {
 				nextSumU = sumU * Math.pow(random.nextDouble(), (double) 1 / (numTask - (i + 1)));
 				taskUtils.add(i,sumU - nextSumU);
 				sumU = nextSumU;
-				if (taskUtils.get(i) > 1) {
+				if (taskUtils.get(i) > 0.95) {
 					discard = true;
 				}
 			}

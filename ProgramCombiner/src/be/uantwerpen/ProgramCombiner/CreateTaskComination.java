@@ -44,6 +44,44 @@ public class CreateTaskComination {
 			System.err.println("Some parameters are missing");
 		}
 	}
+	public void readTemplate()
+	{
+		File f = new File("template");
+		FileInputStream in;
+		BufferedReader reader;
+		try {
+			in = new FileInputStream(f);
+			reader = new BufferedReader(new InputStreamReader(in));
+			String line;
+			while ((line = reader.readLine()) != null) {
+				if(line.contains("HEADER")||line.contains("FOOTER"))
+					readTemplateSection(reader,line);
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	private String readTemplateSection(BufferedReader reader, String keyWord)
+	{
+		String line;
+		
+		try {
+			line = reader.readLine();
+			while (!line.equals(keyWord)) {
+				System.out.println(line);
+				line = reader.readLine(); 
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
+	}
 	public void scanTaskSet()
 	{
 		File f = new File(paramsTaskSet.get(LOCATION).get(0)+"/"+paramsTaskSet.get(NAME).get(0));
@@ -285,7 +323,8 @@ public class CreateTaskComination {
 			reader = new CreateTaskComination(args[0]);
 		else
 			reader = new CreateTaskComination("user.xml");
-		reader.scanTaskSet();
+		reader.readTemplate();
+		//reader.scanTaskSet();
 	}
 
 }
