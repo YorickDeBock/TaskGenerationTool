@@ -18,6 +18,7 @@ public class XMLParser {
 	
 	public XMLParser(String inputFilename) {
 		this.inputFilename = inputFilename;
+		System.out.println("NAAM: "+inputFilename);
 		try {
 			doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new File(inputFilename));
 		} catch (SAXException | ParserConfigurationException e) {

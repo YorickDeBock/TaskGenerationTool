@@ -90,6 +90,7 @@ public class TaskCreator {
 				continue;
 			tupple = new WCET(parameters.get("name").get(0),(Double.parseDouble(parameters.get("WCET").get(1)))/(Double.parseDouble(paramsTarget.get(SPEED).get(0))),parameters.get("path").get(0));
 			usablePrograms.add(tupple);
+			System.out.println(tupple.getExecTime()+"   "+tupple.getLocation());
 		}	
 		//TODO: include the selection parameters for the benchmarks			
 	}
@@ -124,14 +125,14 @@ public class TaskCreator {
 		        	
 		        	for(WCET w:programSequence)
 		        	{
-		        		combinedWCET+=w.getExecTime()*w.getNumberOfExec()/1000;
+		        		combinedWCET+=w.getExecTime()*w.getNumberOfExec();
 		        	}
 		        	if((t.getExe()-combinedWCET)/t.getExe()*100>MAX_DEVIATION)//if the difference between the wanted WCET and the combined WCET is bigger then 2%, then create program sequential through the IPL
 		        	{
 		        		combinedWCET = 0;
 	        			programSequence = solver.findProgramCombinationI(t.getExe());
 			        	for(WCET w:programSequence)
-			        		combinedWCET+=w.getExecTime()*w.getNumberOfExec()/1000;
+			        		combinedWCET+=w.getExecTime()*w.getNumberOfExec();
 			        	ILP++;
 		        	}
 		        	

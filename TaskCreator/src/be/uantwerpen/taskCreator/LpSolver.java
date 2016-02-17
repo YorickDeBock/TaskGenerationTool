@@ -56,7 +56,7 @@ public class LpSolver {
 
             // Set row details
             GLPK.glp_set_row_name(lp, 1, "c1");
-            GLPK.glp_set_row_bnds(lp, 1, GLPKConstants.GLP_UP, 0, wantedExecTime*1000);
+            GLPK.glp_set_row_bnds(lp, 1, GLPKConstants.GLP_UP, 0, wantedExecTime);
             
             for(int i=0;i<programs.size();i++)
             {
@@ -140,7 +140,7 @@ public class LpSolver {
 
             // Set row 1 details
             GLPK.glp_set_row_name(lp, 1, "c1");
-            GLPK.glp_set_row_bnds(lp, 1, GLPKConstants.GLP_UP, 0, wantedExecTime*1000);
+            GLPK.glp_set_row_bnds(lp, 1, GLPKConstants.GLP_UP, 0, wantedExecTime);
             
             for(int i=0;i<programs.size();i++)
             {
@@ -182,7 +182,7 @@ public class LpSolver {
             GLPK.glp_set_obj_coef(lp, programs.size()+1, cacheFlushTime);
 
             // Write model to file
-           // GLPK.glp_write_lp(lp, null, "lp.lp");
+           GLPK.glp_write_lp(lp, null, "lp.lp");
             
             iocp = new glp_iocp();
             GLPK.glp_init_iocp(iocp);

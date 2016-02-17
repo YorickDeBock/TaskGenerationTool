@@ -14,11 +14,6 @@ public class WCET {
 		this.numberOfExec = 1;
 		this.location = location;
 	}
-	public WCET(String programName, double cycles, double frequency) //frequency in MHz
-	{
-		this.programName = programName;
-		this.execTime = cycles/frequency*1000000000; //ns
-	}
 	public double getExecTime() {
 		return execTime;
 	}
